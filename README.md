@@ -2,154 +2,177 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Мой мир Scratch</title>
+  <title>Мой сайт</title>
   <style>
-    * {margin:0;padding:0;box-sizing:border-box;}
-    body {font-family:sans-serif;background:linear-gradient(135deg,#8b2323,#ff8c00);color:#fff;min-height:100vh;position:relative;overflow:hidden;}
-    .snow {position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;overflow:hidden;}
-    .snowflake,.snowball {position:absolute;opacity:0.8;animation:fall linear infinite;}
-    .snowflake {color:#fff;font-size:1em;}
-    .snowball {background:#fff;border-radius:50%;}
-    @keyframes fall {0%{transform:translateY(0) rotate(0deg);opacity:0}10%,90%{opacity:1}100%{transform:translateY(calc(100vh - 50px)) rotate(360deg);opacity:0}}
-    .container {position:relative;z-index:2;max-width:1000px;margin:0 auto;padding:20px;}
-    header,h1 {text-align:center;}
-    h1 {font-size:2.8em;margin:30px 0 10px;text-shadow:2px 2px 6px rgba(0,0,0,0.6);}
-    .nav {display:flex;justify-content:center;gap:20px;margin:25px 0;flex-wrap:wrap;}
-    .btn {background:rgba(255,255,255,0.2);color:#fff;border:2px solid #fff;padding:12px 20px;border-radius:30px;cursor:pointer;font-weight:600;transition:all 0.3s;backdrop-filter:blur(5px);}
-    .btn:hover {background:#ff8c00;border-color:#ff8c00;transform:translateY(-2px);}
-    .section {display:none;padding:30px;background:rgba(255,255,255,0.15);border-radius:15px;margin-top:20px;backdrop-filter:blur(10px);}
-    .active {display:block;}
-    .about-content {display:flex;align-items:center;gap:40px;margin-top:20px;}
-    .about-photo {width:200px;height:200px;border-radius:50%;object-fit:cover;border:5px solid #ff8c00;box-shadow:0 0 20px rgba(255,140,0,0.5);}
-    .about-text {flex:1;line-height:1.7;font-size:1.1em;}
-    .grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:25px;margin-top:25px;}
-    .card {background:rgba(0,0,0,0.2);border-radius:12px;overflow:hidden;text-align:center;transition:transform 0.3s,box-shadow 0.3s;}
-    .card:hover {transform:translateY(-5px);box-shadow:0 15px 30px rgba(0,0,0,0.3);}
-    .card img,.card a {display:block;}
-    .card img {height:160px;object-fit:cover;}
-    .card a {padding:15px;color:#fff;font-weight:bold;text-decoration:none;}
-    footer {text-align:center;margin-top:50px;padding:25px;font-size:0.9em;opacity:0.8;border-top:1px solid rgba(255,255,255,0.3);}
-    @media (max-width:768px) {.about-content{flex-direction:column;text-align:center;}.nav{flex-direction:column;align-items:center;}h1{font-size:2.2em;}}
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+    /* Анимация градиента */
+    .gradient {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(45deg, #ff4e00, #ff9500, #ff4e00);
+      background-size: 400% 400%;
+      animation: gradientAnim 10s ease infinite;
+    }
+    @keyframes gradientAnim {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    /* Вкладки */
+    .tabs {
+      position: relative;
+      z-index: 10;
+      padding: 1rem;
+      display: flex;
+      justify-content: center;
+    }
+    .tab {
+      padding: 0.75rem 1.5rem;
+      margin: 0 0.5rem;
+      background: rgba(255,255,255,0.2);
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .tab:hover { background: rgba(255,255,255,0.4); }
+    .tab.active { background: rgba(255,255,255,0.6); }
+    /* Контент вкладок */
+    .content {
+      position: relative;
+      z-index: 10;
+      color: white;
+      padding: 2rem;
+      text-align: center;
+      display: none;
+    }
+    .content.active { display: block; }
+    .content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 1rem;
+      margin: 1rem 0;
+    }
+    .link-img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin: 1rem;
+    }
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .video-item {
+      border-radius: 0.5rem;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .video-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    /* Снежинки */
+    .snowflake {
+      position: absolute;
+      color: white;
+      pointer-events: none;
+      user-select: none;
+      z-index: 5;
+    }
   </style>
 </head>
 <body>
-  <div class="snow" id="snow"></div>
-  <div class="container">
-    <header><h1>Мой мир Scratch</h1></header>
-    <div class="nav">
-      <button class="btn" onclick="showSection('about')">Обо мне</button>
-      <button class="btn" onclick="showSection('scratch')">О Scratch</button>
-      <button class="btn" onclick="showSection('lessons')">Уроки</button>
-    </div>
-    <div id="about" class="section active">
-      <h2>Обо мне</h2>
-      <div class="about-content">
-        <img src="https://placehold.co/200x200?text=Me" alt="Фото автора" class="about-photo">
-        <div class="about-text">
-          <p>Привет! Меня зовут [Ваше имя], и я увлечён программированием в Scratch. Уже [X] лет создаю игры, анимации и интерактивные истории. Верю, что программирование — это творческий процесс, доступный каждому.</p>
-          <p>В своих проектах я стараюсь сочетать:</p>
-          <ul style="margin-left:20px;">
-            <li>Креативность</li><li>Логику</li><li>Красоту дизайна</li><li>Интересную механику</li>
-          </ul>
-          <p>Моя цель — вдохновлять других на создание собственных проектов в Scratch!</p>
-        </div>
-      </div>
-    </div>
-    <div id="scratch" class="section">
-      <h2>Что такое Scratch?</h2>
-      <div class="grid">
-        <div class="card">
-          <img src="https://scratch.mit.edu/static/img/scratch-logo.png" alt="Логотип Scratch">
-          <a href="https://scratch.mit.edu" target="_blank">Официальный сайт</a>
-        </div>
-        <div class="card">
-          <img src="https://en.scratch-wiki.info/wiki/images/thumb/Scratch_Wiki_Logo.png/80px-Scratch_Wiki_Logo.png" alt="Wiki Scratch">
-          <a href="https://ru.scratch-wiki.info" target="_blank">Scratch Wiki</a>
-        </div>
-        <div class="card">
-          <img src="https://scratch.mit.edu/static/img/projects/project-default.png" alt="Проекты Scratch">
-          <a href="https://scratch.mit.edu/explore/projects/all" target="_blank">Галерея проектов</a>
-        </div>
-        <div class="card">
-          <img src="https://www.khanacademy.org/images/logo-square.png" alt="Khan Academy">
-          <a href="https://www.khanacademy.org/computing/computer-programming/scratch" target="_blank">Уроки на Khan Academy</a>
-        </div>
-      </div>
-    </div>
-    <div id="lessons" class="section">
-      <h2>Полезные уроки</h2>
-      <div class="grid">
-        <div class="card">
-          <img src="https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg" alt="Урок 1">
-          <a href="https://youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">Основы Scratch</a>
-        </div>
-        <div class="card">
-          <img src="https://i.ytimg.com/vi/abc123/hqdefault.jpg" alt="Урок 2">
-          <a href="https://youtube.com/watch?v=abc123" target="_blank">Анимация в Scratch</a>
-        </div>
-        <div class="card">
-          <img src="https://i.ytimg.com/vi/def456/hqdefault.jpg" alt="Урок 3">
-          <a href="https://youtube.com/watch?v=def456" target="_blank">Создание игр</a>
-                  </div>
-        <div class="card">
-          <img src="https://i.ytimg.com/vi/ghi789/hqdefault.jpg" alt="Урок 4">
-          <a href="https://youtube.com/watch?v=ghi789" target="_blank">Продвинутые техники</a>
-        </div>
-      </div>
-    </div>
+  <div class="gradient"></div>
 
-    <footer>
-      © 2025 Мой мир Scratch | Образовательный ресурс
-      <p style="margin-top:10px;font-size:0.8em;">
-        Scratch — проект MIT Media Lab. Все права на логотип и контент принадлежат их авторам.
-      </p>
-    </footer>
+  <!-- Вкладки -->
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('about')">Обо мне</div>
+    <div class="tab" onclick="showTab('scratch')">О Scratch</div>
+    <div class="tab" onclick="showTab('lessons')">Уроки</div>
+  </div>
+
+  <!-- Контент вкладок -->
+  <div id="about" class="content active">
+    <h1>Обо мне</h1>
+    <img src="https://via.placeholder.com/300" alt="Моё фото">
+    <p>Здесь можно написать пару слов о себе.</p>
+  </div>
+
+  <div id="scratch" class="content">
+    <h1>О Scratch</h1>
+    <a href="https://scratch.mit.edu" target="_blank">
+      <img class="link-img" src="https://via.placeholder.com/100?text=Scratch" alt="Scratch">
+    </a>
+    <p>Scratch — это визуальный язык программирования для детей и начинающих. Позволяет создавать анимации, игры и интерактивные истории.</p>
+  </div>
+
+  <div id="lessons" class="content">
+    <h1>Уроки</h1>
+    <div class="video-grid">
+      <div class="video-item" onclick="window.open('https://vk.com/video...', '_blank')">
+        <img src="https://via.placeholder.com/150?text=Урок+1" alt="Урок 1">
+      </div>
+      <div class="video-item" onclick="window.open('https://vk.com/video...', '_blank')">
+        <img src="https://via.placeholder.com/150?text=Урок+2" alt="Урок 2">
+      </div>
+      <!-- Добавьте больше уроков по аналогии -->
+    </div>
   </div>
 
   <script>
-    function showSection(id) {
-      document.querySelectorAll('.section').forEach(section => {
-        section.classList.toggle('active', section.id === id);
+    // Переключение вкладок
+    function showTab(tabId) {
+      document.querySelectorAll('.content').forEach(tab => {
+        tab.classList.toggle('active', tab.id === tabId);
+      });
+      document.querySelectorAll('.tab').forEach(btn => {
+        btn.classList.toggle('active', btn.textContent.includes(
+          document.getElementById(tabId).querySelector('h1').textContent
+        ));
       });
     }
 
-    function createSnowElement() {
-      const snow = document.getElementById('snow');
-      const element = document.createElement('div');
-      const isSnowflake = Math.random() > 0.5;
+    // Создание снежинок
+    function createSnowflake() {
+      const snowflake = document.createElement('div');
+      snowflake.className = 'snowflake';
+      snowflake.textContent = '❄'; // или другой символ снежинки
+      snowflake.style.fontSize = `${Math.random() * 20 + 10}px`;
+      snowflake.style.left = `${Math.random() * window.innerWidth}px`;
+      snowflake.style.top = '-10px';
+      snowflake.style.opacity = Math.random();
+      document.body.appendChild(snowflake);
 
-      if (isSnowflake) {
-        element.className = 'snowflake';
-        element.textContent = '❄';
-      } else {
-        element.className = 'snowball';
+      let pos = 0;
+      const speed = Math.random() * 3 + 1;
+      const sway = Math.random() * 2 - 1;
+
+      function fall() {
+        pos += speed;
+        snowflake.style.top = `${pos}px`;
+        snowflake.style.left = `${parseFloat(snowflake.style.left) + sway}px`;
+
+        if (pos < window.innerHeight) {
+          requestAnimationFrame(fall);
+        } else {
+          snowflake.remove();
+        }
       }
-
-      const size = Math.random() * 20 + 10;
-      const left = Math.random() * 100;
-      const opacity = Math.random() * 0.7 + 0.3;
-      const duration = Math.random() * 10 + 5;
-      const delay = Math.random() * 5;
-
-      element.style.width = `${size}px`;
-      element.style.height = `${size}px`;
-      element.style.left = `${left}%`;
-      element.style.opacity = opacity;
-      element.style.animationDuration = `${duration}s`;
-      element.style.animationDelay = `${delay}s`;
-
-      snow.appendChild(element);
-
-      setTimeout(() => {
-        element.remove();
-      }, (duration + delay) * 1000);
+      requestAnimationFrame(fall);
     }
 
-    setInterval(createSnowElement, 150);
-
-    for (let i = 0; i < 20; i++) {
-      createSnowElement();
-    }
+    // Запуск снегопада
+    setInterval(createSnowflake, 300);
   </script>
 </body>
 </html>
